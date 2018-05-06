@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.ProductMapper">
+	
+	<!-- 根据产品id，产品名称，产品分类 查询产品 -->
+	<select id="getProduct" parameterType="ProductPage" resultType="ProductPage">		
+		SELECT 	product.id ,	productName,price,nowPrice,	stock,filename,	category,describe1,	describe2, 	ADDTIME,categoryName
+		FROM product
+		INNER JOIN productcategory
+		ON product.category=productcategory.id
+		<trim prefix="where" suffixOverrides="AND">
+			<if test="id!=null">
+				product.id=#{id} AND
+			</if>
+			<if test="category!=null">
+				category = #{category} AND
+			</if>			
+			<if test="productName!=null and  productName!=''">
+				productName LIKE CONCAT('%',#{productName},'%')
+			</if>
+		</trim> 
+		<if test="pageIndex!=null and pageIndex!=''">
+			limit #{firstData},#{pagesize}
+		</if>
+	</select>
+	<!-- 根据产品id，产品名称，产品分类 查询产品的总数量  用于分页 -->
+	<select id="getProductCount" parameterType="ProductPage" resultType="int">
+		select count(1) FROM product
+		INNER JOIN productcategory
+		ON product.category=productcategory.id
+		<trim prefix="where" suffixOverrides="AND">
+			<if test="id!=null">
+				product.id=#{id} AND
+			</if>
+			<if test="category!=null">
+				category = #{category} AND
+			</if>			
+			<if test="productName!=null and  productName!=''">
+				productName LIKE CONCAT('%',#{productName},'%')
+			</if>
+		</trim>
+	
+	</select>
+	<!-- 首页显示产品信息 -->
+	<select id="getProductsOBstockOrCTime" resultType="Product" parameterType="map">
+		SELECT 	id,	productName, price,	nowPrice,stock, filename,category,describe1,describe2,ADDTIME	 
+		FROM salephone.product 
+		<!-- 火爆热售模块——显示5个产品 -->
+		<if test="opr=='hot_5'">
+			ORDER BY stock DESC
+			LIMIT 0, 10
+		</if>
+		<!-- 最热模块——显示3个产品 -->
+		<if test="opr=='hot_3'">
+			ORDER BY stock DESC
+			LIMIT 0, 3
+		</if>
+		<!-- 最新模块——显示3个产品 -->
+		<if test="opr=='new_3'">
+			ORDER BY addtime DESC
+			LIMIT 0, 3
+		</if>
+		<!-- 最近上架模块——显示5个产品 -->
+		<if test="opr=='new_5'">
+			ORDER BY addtime DESC
+			LIMIT 0, 5
+		</if>
+	</select>
+	<!--产品细节页面的产品模块——最近上架——相似模块-->
+	<select id="getProductByCategory" resultType="Product" parameterType="map">
+		SELECT 	id, productName,price,nowPrice,stock,filename,category,describe1,describe2,	ADDTIME	 
+	    FROM	product  
+	    <where>
+	    	category=#{category}
+	    </where> 	    
+		<!-- 产品模块——显示4个产品 -->
+		<if test="opr=='pro_4'">
+			ORDER BY stock 
+			LIMIT 0, 4
+		</if>
+		<!-- 最近上架模块——显示5个产品 -->
+		<if test="opr=='new_5'">
+			ORDER BY addtime DESC
+			LIMIT 0, 5
+		</if>
+		<!-- 相似模块——显示8个产品 -->
+		<if test="opr=='same_7'">
+			ORDER BY stock DESC
+			LIMIT 0, 7
+		</if>
+	</select>
+	<!--最近浏览记录 显示3条记录-->
+	<select id="getProductByIdLatelyView" parameterType="int" resultType="Product">
+		SELECT 	id,
+		productName,
+		price,
+		nowPrice,
+		stock,
+		filename,
+		category,
+		describe1,
+		describe2,
+		ADDTIME
+		FROM
+		salephone.product
+		<where>
+			id = #{id}
+		</where>
+	</select>
+</mapper>
