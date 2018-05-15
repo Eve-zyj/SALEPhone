@@ -81,73 +81,78 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                                             <th class="product-subtotal">总 计</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr class="cart_item">
-                                            <td class="product-remove">
-                                                <input type="checkbox" class="remove" name="cart-checkbox">
-                                            </td>
+                                    <c:if test="${error !=null}"><span class="h3" style="color: red;">${error}</span></c:if>
+                                    <c:if test="${empty error}">
+                                        <tbody>
+                                        <c:forEach items="${products}" var="pro" varStatus="statu">
+                                            <tr class="cart_item">
+                                                <td class="product-remove">
+                                                    <input type="checkbox" class="remove" name="cart-checkbox">
+                                                </td>
 
-                                            <td class="product-thumbnail">
-                                                <a href="single-product.html"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="${pageContext.request.contextPath }/statics/img/ph2.png"></a>
-                                            </td>
+                                                <td class="product-thumbnail">
+                                                    <a href="single-product.html"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="${pageContext.request.contextPath }/statics/img/${pro.filename}"></a>
+                                                </td>
 
-                                            <td class="product-name">
-                                                <a href="single-product.html"> Oppo </a> 
-                                            </td>
+                                                <td class="product-name">
+                                                    <a href="single-product.html"> ${pro.productName} </a>
+                                                </td>
 
-                                            <td class="product-price">
-                                                <span class="amount">￥2500.00</span> 
-                                            </td>
+                                                <td class="product-price">
+                                                    <span class="amount">￥ ${pro.nowPrice}</span>
+                                                </td>
 
-                                            <td class="product-quantity">
-                                                <div class="quantity buttons_added">
-                                                    <input type="button" class="minus" value="-">
-                                                    <input type="text" size="4" class="input-text qty text" title="Qty" value="1">
-                                                    <input type="button" class="plus" value="+">
-                                                </div>
-                                            </td>
+                                                <td class="product-quantity">
+                                                    <div class="quantity buttons_added">
+                                                        <input type="button" class="minus" value="-">
+                                                        <input type="text" size="1" class="input-text qty text" title="Qty" value="${carts[statu.index].quantity}"/>
+                                                        <input type="button" class="plus" value="+">
+                                                    </div>
+                                                </td>
 
-                                            <td class="product-subtotal">
-                                                <span class="amount">￥2500.00</span> 
-                                            </td>
-                                        </tr>
-                                        <tr class="cart_item">
-                                            <td class="product-remove">
-                                                <%--<a title="Remove this item" class="remove" href="#">×</a>--%>
-                                                <input type="checkbox" class="remove" name="cart-checkbox">
-                                            </td>
+                                                <td class="product-subtotal">
+                                                    <span class="amount">￥${carts[statu.index].cost}</span>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                            <%-- <tr class="cart_item">
+                                                 <td class="product-remove">
+                                                     <input type="checkbox" class="remove" name="cart-checkbox">
+                                                 </td>
 
-                                            <td class="product-thumbnail">
-                                                <a href="single-product.html"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="${pageContext.request.contextPath }/statics/img/ph2.png"></a>
-                                            </td>
+                                                 <td class="product-thumbnail">
+                                                     <a href="single-product.html"><img width="145" height="145" alt="poster_1_up" class="shop_thumbnail" src="${pageContext.request.contextPath }/statics/img/ph2.png"></a>
+                                                 </td>
 
-                                            <td class="product-name">
-                                                <a href="single-product.html"> Oppo </a> 
-                                            </td>
+                                                 <td class="product-name">
+                                                     <a href="single-product.html"> Oppo </a>
+                                                 </td>
 
-                                            <td class="product-price">
-                                                <span class="amount">￥2500.00</span> 
-                                            </td>
+                                                 <td class="product-price">
+                                                     <span class="amount">￥2500.00</span>
+                                                 </td>
 
-                                            <td class="product-quantity">
-                                                <div class="quantity buttons_added">
-                                                    <input type="button" class="minus" value="-">
-                                                    <input type="text" size="4" class="input-text qty text" title="Qty" value="1">
-                                                    <input type="button" class="plus" value="+">
-                                                </div>
-                                            </td>
+                                                 <td class="product-quantity">
+                                                     <div class="quantity buttons_added">
+                                                         <input type="button" class="minus" value="-">
+                                                         <input type="text" size="4" class="input-text qty text" title="Qty" value="1">
+                                                         <input type="button" class="plus" value="+">
+                                                     </div>
+                                                 </td>
 
-                                            <td class="product-subtotal">
-                                                <span class="amount">￥2500.00</span> 
-                                            </td>
-                                        </tr>
+                                                 <td class="product-subtotal">
+                                                     <span class="amount">￥2500.00</span>
+                                                 </td>
+                                             </tr>--%>
+
                                         <tr>
                                             <td class="actions" colspan="6">
-                                                <p><strong>购物车总计：</strong><span id="totalcount">3000.00 </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                                <input type="submit" value="结算" name="proceed" class=" checkout-button button alt wc-forward"></p>
+                                                <p><strong>购物车总计：</strong><span id="totalcount">${totalMoney} </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                    <input type="submit" value="结算" name="proceed" class=" checkout-button button alt wc-forward"></p>
                                             </td>
                                         </tr>
-                                    </tbody>
+                                        </tbody>
+                                    </c:if>
                                 </table>
                             </form>
 

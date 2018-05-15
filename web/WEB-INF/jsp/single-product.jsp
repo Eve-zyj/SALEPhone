@@ -52,7 +52,7 @@
 									</div>
 								</div>
 							</div>
-
+							<input type="hidden" id="path" value="${pageContext.request.contextPath}" />
 							<div class="col-sm-6">
 								<div class="product-inner">
 									<h2 class="product-name">${pro.productName }</h2>
@@ -60,14 +60,14 @@
 										<ins>${pro.nowPrice }</ins>
 										<del>${pro.price }</del>
 									</div>
-
 									<form class="cart">
 										<div class="quantity">
-											<input type="number" size="4" class="input-text qty text pronum"
-												title="Qty" value="1" name="quantity" min="1" step="1">
+											<input type="number" size="4" id="quantity" class="input-text qty text pronum quantity"
+												title="Qty"  value="1"  price="${pro.nowPrice}" name="quantity" min="1" step="1"/>
 										</div>
-										<input name="proid" value="${pro.id}" class="proid" type="hidden">
-										<button class="add_to_cart_button" type="submit">加入购物车</button>
+										<input name="productId" value="${pro.id}" class="productId" type="hidden">
+										<input name="cost" value="${pro.price}" class="cost" type="hidden">
+										<button class="add_to_cart_button"  type="button">加入购物车</button>
 									</form>
 
 									<div class="product-inner-category">
